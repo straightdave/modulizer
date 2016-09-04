@@ -68,7 +68,7 @@ at last, you load the module and use it in your html page:
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
-<title>W3.CSS</title>
+<title>The Title</title>
 <body>
 
 <div id="my-mod"></div>
@@ -78,3 +78,6 @@ at last, you load the module and use it in your html page:
 </body>
 </html>
 ```
+>You can compress the js files of modules
+
+Voila!
