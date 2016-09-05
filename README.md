@@ -1,41 +1,83 @@
-# Modulizer
+# modulizer
+a ruby gem that modulize the web pages
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/modulizer`. To experiment with that code, run `bin/console` for an interactive prompt.
+## basic idea
+while building web applications,
+you may need to separate a complex web page into pieces which are more isolated,
+independent, easy-to-maintain and, the most important, reusable.
+similar to 'partial' components in many backend frameworks (eg. sinatra, rails).
+further more, it'll be good if you can package all things together, like the html templates, styles and scripts.
 
-TODO: Delete this and the text above, and describe your gem
+this'll make it easy to develop a web site with complex pages.
 
-## Installation
+## get started
+assume you have a module file with the content:
+```html
+<!-- my_mod.html -->
+<style scoped>
+h2 {
+  color: red;
+}
+</style>
 
-Add this line to your application's Gemfile:
+<template lang="haml">
+%h2 Hello, world!
+</template>
 
-```ruby
-gem 'modulizer'
+<script>
+(function(window, $) {
+  $(function(){
+    $('h2').on('click', function () {
+      alert('haha')
+    });
+  });
+})(window,jQuery);
+</script>
 ```
 
-And then execute:
+then, use the gem to compile:
+```
+$> modulizer my_mod.html -tlang=haml -o builds/my_mod.js
+```
 
-    $ bundle
+it will be compiled to a js file:
+```javascript
+/* javascript for my-mod */
+(function (window, $) {
+  // auto-generated hook, to insert component into hive div
+  // use jQuery to manipulate dom
+  var style = "<style>div#my-navbar h2 {color: red;}</style>";
+  var template = "<h2>Hello, world</h2>"; // result of pre-render process
+  var script =
+  "<script> \
+  (function(window, $) {\
+    $(function(){\
+      $('div#my-navbar h2').on('click', function(){alert('haha')});\
+    });\
+  })(window,jQuery);\
+  </script>";
 
-Or install it yourself as:
+  $(function() {
+    $("div#my-navbar").html(style + template + script);
+  });
+})(window, jQuery);
+```
 
-    $ gem install modulizer
+at last, you load the module and use it in your html page:
+```html
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<title>The Title</title>
+<body>
 
-## Usage
+<div id="my-mod"></div>
 
-TODO: Write usage instructions here
+<script src="js/jquery-3.1.0.min.js"></script>
+<script src="modules/builds/my-mod.js"></script>
+</body>
+</html>
+```
+>You can compress the js files of modules
 
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/modulizer. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
-
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
+Voila!
