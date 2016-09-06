@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { exit 1 }
+
+require "modulizer"
+require 'optparse'
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: modulizer.rb [options]"
+
+  opts.on("-e", "--entry ENTRY_FILE", "input file") do |e|
+    options[:input] = e
+  end
+
+  opts.on("-h", "--help", "Prints this help") do
+    puts opts
+    exit
+  end
+end.parse!
+
+mod_file = options[:input]
+raise "invalid input #{mod_file}" unless mod_file
+
+Modulizer::Dummy.compile mod_file

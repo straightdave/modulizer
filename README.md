@@ -20,46 +20,52 @@ h2 {
 }
 </style>
 
-<template lang="haml">
-%h2 Hello, world!
+<template>
+<h2>Hello, world!</h2>
 </template>
 
 <script>
-(function(window, $) {
-  $(function(){
-    $('h2').on('click', function () {
-      alert('haha')
-    });
+$(function(){
+  $('h2').on('click', function () {
+    alert('haha');
   });
-})(window,jQuery);
+});
 </script>
 ```
 
 then, use the gem to compile:
 ```
-$> modulizer my_mod.html -tlang=haml -o builds/my_mod.js
+$> modulizer -e my_mod.html -o builds/my_mod.js
 ```
 
 it will be compiled to a js file:
 ```javascript
-/* javascript for my-mod */
+/* auto-generated js for my-mod */
 (function (window, $) {
-  // auto-generated hook, to insert component into hive div
-  // use jQuery to manipulate dom
-  var style = "<style>div#my-navbar h2 {color: red;}</style>";
-  var template = "<h2>Hello, world</h2>"; // result of pre-render process
-  var script =
-  "<script> \
-  (function(window, $) {\
-    $(function(){\
-      $('div#my-navbar h2').on('click', function(){alert('haha')});\
-    });\
-  })(window,jQuery);\
-  </script>";
+var style =
+'<style>\
+div#my_mod h2 {\
+  color: red;\
+}\
+</style>';
 
-  $(function() {
-    $("div#my-navbar").html(style + template + script);
-  });
+var template =
+'<h2>Hello, world</h2>';
+
+var script =
+'<script>\
+(function(window, $) {\
+  $(function(){\
+    $(\'div#my_mod h2\').on(\'click\', function () {\
+      alert(\'haha\');\
+    });\
+  });\
+})(window,jQuery);\
+</script>';
+
+$(function() {
+  $("div#my_mod").html(style + template + script);
+});
 })(window, jQuery);
 ```
 
@@ -74,7 +80,7 @@ at last, you load the module and use it in your html page:
 <div id="my-mod"></div>
 
 <script src="js/jquery-3.1.0.min.js"></script>
-<script src="modules/builds/my-mod.js"></script>
+<script src="modules/builds/my_mod.js"></script>
 </body>
 </html>
 ```
