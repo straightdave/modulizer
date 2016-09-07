@@ -1,6 +1,8 @@
 # modulizer
 a ruby gem that modulize the web pages
 
+[![Build Status](https://travis-ci.org/straightdave/modulizer.svg?branch=master)](https://travis-ci.org/straightdave/modulizer)
+
 ## basic idea
 while building web applications,
 you may need to separate a complex web page into pieces which are more isolated,
