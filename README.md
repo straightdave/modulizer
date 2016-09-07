@@ -1,19 +1,30 @@
 # modulizer
-a ruby gem that modulize the web pages
+A ruby gem that helps modulize the web pages
 
 [![Build Status](https://travis-ci.org/straightdave/modulizer.svg?branch=master)](https://travis-ci.org/straightdave/modulizer)
 
 ## basic idea
-while building web applications,
-you may need to separate a complex web page into pieces which are more isolated,
-independent, easy-to-maintain and, the most important, reusable.
-similar to 'partial' components in many backend frameworks (eg. sinatra, rails).
-further more, it'll be good if you can package all things together, like the html templates, styles and scripts.
+Similar to the concept of 'partials' in many backend frameworks (eg. sinatra, rails), while developing web applications, you may like to separate a complex web page into different components which, thus, could be more isolated, independent, easy-to-maintain and, the most important, reusable.
 
-this'll make it easy to develop a web site with complex pages.
+Here we call such components **modules**.
+A module is just a single file which consists of mainly 3 parts of information:
+  - styling
+  - template
+  - scripting
+
+We put all related thing together in one single file for a module to make it more maintainable and isolated. You can develop many modules and then use **modulizer** to build them.
+After building, the information would be compiled into one js file. Currently we need jQuery to make this work. So you need to load jQuery to the pages.
+
+## setup
+**Modulizer** is a ruby gem. You can install it via:
+```bash
+$> gem install modulizer
+```
+>Assume you have had ruby and gem installed. Newer the better.
 
 ## get started
-assume you have a module file with the content:
+
+Say you have a module file with the content:
 ```html
 <!-- my_mod.html -->
 <style scoped>
@@ -28,50 +39,53 @@ h2 {
 
 <script>
 $(function(){
-  $('h2').on('click', function () {
+  $('div#my_mod h2').on('click', function () {
     alert('haha');
   });
 });
 </script>
 ```
+>The module files use '.html' as extend filename just for syntax highlighting of editors. You can use any kind of names.
 
-then, use the gem to compile:
-```
+The *style* element can have attribute 'scoped' to indicate the stylings are only working inside the modules. Behind the curtain it adds ```div#mod_name``` as prefix to the css selectors to limit styling effect.
+
+Then use modulizer to build:
+```bash
 $> modulizer -e my_mod.html -o builds/my_mod.js
 ```
 
-it will be compiled to a js file:
+The module file would be compiled to a js file:
 ```javascript
 /* auto-generated js for my-mod */
 (function (window, $) {
-var style =
-'<style>\
-div#my_mod h2 {\
-  color: red;\
-}\
-</style>';
+  var style =
+  '<style>\
+  div#my_mod h2 {\
+    color: red;\
+  }\
+  </style>';
 
-var template =
-'<h2>Hello, world</h2>';
+  var template =
+  '<h2>Hello, world</h2>';
 
-var script =
-'<script>\
-(function(window, $) {\
-  $(function(){\
-    $(\'div#my_mod h2\').on(\'click\', function () {\
-      alert(\'haha\');\
+  var script =
+  '<script>\
+  (function(window, $) {\
+    $(function(){\
+      $(\'div#my_mod h2\').on(\'click\', function () {\
+        alert(\'haha\');\
+      });\
     });\
-  });\
-})(window,jQuery);\
-</script>';
+  })(window,jQuery);\
+  </script>';
 
-$(function() {
-  $("div#my_mod").html(style + template + script);
-});
+  $(function() {
+    $("div#my_mod").html(style + template + script);
+  });
 })(window, jQuery);
 ```
 
-at last, you load the module and use it in your html page:
+Now you can load the module and use it in your html page:
 ```html
 <!DOCTYPE html>
 <html>
