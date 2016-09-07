@@ -1,4 +1,5 @@
 require "modulizer/version"
+require "modulizer/stylebuilder"
 
 module Modulizer
   class Dummy
@@ -15,25 +16,25 @@ module Modulizer
       template_mode = read_attributes template[1]
 
       script_content   = escape_js_variable_string script[2]
-      style_content    = escape_js_variable_string style[2]
+      style_content    = escape_js_variable_string(StyleBuilder.build(mod_name, style[2], style_mode))
       template_content = escape_js_variable_string template[2]
 
-      puts """/* generated js file for module:#{mod_name} */
-(function(window,$){
-var script =
-'<script>#{script_content}</script>';
+      """/* generated js file for module:#{mod_name} */
+      (function(window,$){
+        var script =
+        '<script>#{script_content}</script>';
 
-var template =
-'#{template_content}';
+        var template =
+        '#{template_content}';
 
-var style =
-'<style>#{style_content}</style>';
+        var style =
+        '<style>#{style_content}</style>';
 
-$(function(){
-  $('div##{mod_name}').html(style + template + script);
-});
-})(window, jQuery);
-"""
+        $(function(){
+          $('div##{mod_name}').html(style + template + script);
+        });
+      })(window, jQuery);
+      """
     end
 
     private

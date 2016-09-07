@@ -9,10 +9,21 @@ require 'optparse'
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: modulizer.rb [options]"
+  opts.banner = """
+  Modulizer: a ruby gem that modulize the web pages
+  author: dave wu (eyaswoo@163.com)
+  Sept. 2016 MIT
 
-  opts.on("-e", "--entry ENTRY_FILE", "input file") do |e|
+  Usage:
+  $> modulizer [options]
+  """
+
+  opts.on("-e", "--entry ENTRY_FILE", "input file, normally html") do |e|
     options[:input] = e
+  end
+
+  opts.on("-o", "--output OUTPUT_FILE", "output file, normally js. if not provided, output to stdout") do |o|
+    options[:output] = o
   end
 
   opts.on("-h", "--help", "Prints this help") do
@@ -22,6 +33,12 @@ OptionParser.new do |opts|
 end.parse!
 
 mod_file = options[:input]
-raise "invalid input #{mod_file}" unless mod_file
+raise "valid input module file is required" unless mod_file
 
-Modulizer::Dummy.compile mod_file
+result = Modulizer::Dummy.compile mod_file
+
+if options[:output].nil?
+  puts result
+else
+  File.write(options[:output], result)
+end

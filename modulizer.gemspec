@@ -8,8 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Modulizer::VERSION
   spec.authors       = ["dave"]
   spec.email         = ["eyaswoo@163.com"]
-  spec.summary       = "compiler for web page modules"
-  spec.description   = "one easy way to develop web applications with isolated and reusable web page modules"
+  spec.summary       = "a ruby gem that modulize the web pages"
+  spec.description   = "One easy way to develop web applications with isolated and reusable web page modules." +
+                       "For more detailed information, please refer to https://github.com/straightdave/modulizer"
   spec.homepage      = "https://github.com/straightdave/modulizer"
   spec.license       = "MIT"
 
