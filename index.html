@@ -31,25 +31,42 @@
           <h1>
 <a id="modulizer" class="anchor" href="#modulizer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>modulizer</h1>
 
-<p>a ruby gem that modulize the web pages</p>
+<p>A ruby gem that helps modulize the web pages</p>
 
 <p><a href="https://travis-ci.org/straightdave/modulizer"><img src="https://travis-ci.org/straightdave/modulizer.svg?branch=master" alt="Build Status"></a></p>
 
 <h2>
 <a id="basic-idea" class="anchor" href="#basic-idea" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>basic idea</h2>
 
-<p>while building web applications,
-you may need to separate a complex web page into pieces which are more isolated,
-independent, easy-to-maintain and, the most important, reusable.
-similar to 'partial' components in many backend frameworks (eg. sinatra, rails).
-further more, it'll be good if you can package all things together, like the html templates, styles and scripts.</p>
+<p>Similar to the concept of 'partials' in many backend frameworks (eg. sinatra, rails), while developing web applications, you may like to separate a complex web page into different components which, thus, could be more isolated, independent, easy-to-maintain and, the most important, reusable.</p>
 
-<p>this'll make it easy to develop a web site with complex pages.</p>
+<p>Here we call such components <strong>modules</strong>.
+A module is just a single file which consists of mainly 3 parts of information:</p>
+
+<ul>
+<li>styling</li>
+<li>template</li>
+<li>scripting</li>
+</ul>
+
+<p>We put all related thing together in one single file for a module to make it more maintainable and isolated. You can develop many modules and then use <strong>modulizer</strong> to build them.
+After building, the information would be compiled into one js file. Currently we need jQuery to make this work. So you need to load jQuery to the pages.</p>
+
+<h2>
+<a id="setup" class="anchor" href="#setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>setup</h2>
+
+<p><strong>Modulizer</strong> is a ruby gem. You can install it via:</p>
+
+<div class="highlight highlight-source-shell"><pre>$<span class="pl-k">&gt;</span> gem install modulizer</pre></div>
+
+<blockquote>
+<p>Assume you have had ruby and gem installed. Newer the better.</p>
+</blockquote>
 
 <h2>
 <a id="get-started" class="anchor" href="#get-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>get started</h2>
 
-<p>assume you have a module file with the content:</p>
+<p>Say you have a module file with the content:</p>
 
 <div class="highlight highlight-text-html-basic"><pre><span class="pl-c">&lt;!-- my_mod.html --&gt;</span>
 <span class="pl-s1">&lt;<span class="pl-ent">style</span> <span class="pl-e">scoped</span>&gt;</span>
@@ -64,48 +81,53 @@ further more, it'll be good if you can package all things together, like the htm
 
 <span class="pl-s1">&lt;<span class="pl-ent">script</span>&gt;</span>
 <span class="pl-s1"><span class="pl-en">$</span>(<span class="pl-k">function</span>(){</span>
-<span class="pl-s1">  <span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>h2<span class="pl-pds">'</span></span>).<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>click<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> () {</span>
+<span class="pl-s1">  <span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>div#my_mod h2<span class="pl-pds">'</span></span>).<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>click<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> () {</span>
 <span class="pl-s1">    <span class="pl-en">alert</span>(<span class="pl-s"><span class="pl-pds">'</span>haha<span class="pl-pds">'</span></span>);</span>
 <span class="pl-s1">  });</span>
 <span class="pl-s1">});</span>
 <span class="pl-s1">&lt;/<span class="pl-ent">script</span>&gt;</span></pre></div>
 
-<p>then, use the gem to compile:</p>
+<blockquote>
+<p>The module files use '.html' as extend filename just for syntax highlighting of editors. You can use any kind of names.</p>
+</blockquote>
 
-<pre><code>$&gt; modulizer -e my_mod.html -o builds/my_mod.js
-</code></pre>
+<p>The <em>style</em> element can have attribute 'scoped' to indicate the stylings are only working inside the modules. Behind the curtain it adds <code>div#mod_name</code> as prefix to the css selectors to limit styling effect.</p>
 
-<p>it will be compiled to a js file:</p>
+<p>Then use modulizer to build:</p>
+
+<div class="highlight highlight-source-shell"><pre>$<span class="pl-k">&gt;</span> modulizer -e my_mod.html -o builds/my_mod.js</pre></div>
+
+<p>The module file would be compiled to a js file:</p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">/* auto-generated js for my-mod */</span>
 (<span class="pl-k">function</span> (<span class="pl-c1">window</span>, <span class="pl-smi">$</span>) {
-<span class="pl-k">var</span> style <span class="pl-k">=</span>
-<span class="pl-s"><span class="pl-pds">'</span>&lt;style&gt;\</span>
-<span class="pl-s">div#my_mod h2 {\</span>
-<span class="pl-s">  color: red;\</span>
-<span class="pl-s">}\</span>
-<span class="pl-s">&lt;/style&gt;<span class="pl-pds">'</span></span>;
+  <span class="pl-k">var</span> style <span class="pl-k">=</span>
+  <span class="pl-s"><span class="pl-pds">'</span>&lt;style&gt;\</span>
+<span class="pl-s">  div#my_mod h2 {\</span>
+<span class="pl-s">    color: red;\</span>
+<span class="pl-s">  }\</span>
+<span class="pl-s">  &lt;/style&gt;<span class="pl-pds">'</span></span>;
 
-<span class="pl-k">var</span> template <span class="pl-k">=</span>
-<span class="pl-s"><span class="pl-pds">'</span>&lt;h2&gt;Hello, world&lt;/h2&gt;<span class="pl-pds">'</span></span>;
+  <span class="pl-k">var</span> template <span class="pl-k">=</span>
+  <span class="pl-s"><span class="pl-pds">'</span>&lt;h2&gt;Hello, world&lt;/h2&gt;<span class="pl-pds">'</span></span>;
 
-<span class="pl-k">var</span> script <span class="pl-k">=</span>
-<span class="pl-s"><span class="pl-pds">'</span>&lt;script&gt;\</span>
-<span class="pl-s">(function(window, $) {\</span>
-<span class="pl-s">  $(function(){\</span>
-<span class="pl-s">    $(<span class="pl-cce">\'</span>div#my_mod h2<span class="pl-cce">\'</span>).on(<span class="pl-cce">\'</span>click<span class="pl-cce">\'</span>, function () {\</span>
-<span class="pl-s">      alert(<span class="pl-cce">\'</span>haha<span class="pl-cce">\'</span>);\</span>
+  <span class="pl-k">var</span> script <span class="pl-k">=</span>
+  <span class="pl-s"><span class="pl-pds">'</span>&lt;script&gt;\</span>
+<span class="pl-s">  (function(window, $) {\</span>
+<span class="pl-s">    $(function(){\</span>
+<span class="pl-s">      $(<span class="pl-cce">\'</span>div#my_mod h2<span class="pl-cce">\'</span>).on(<span class="pl-cce">\'</span>click<span class="pl-cce">\'</span>, function () {\</span>
+<span class="pl-s">        alert(<span class="pl-cce">\'</span>haha<span class="pl-cce">\'</span>);\</span>
+<span class="pl-s">      });\</span>
 <span class="pl-s">    });\</span>
-<span class="pl-s">  });\</span>
-<span class="pl-s">})(window,jQuery);\</span>
-<span class="pl-s">&lt;/script&gt;<span class="pl-pds">'</span></span>;
+<span class="pl-s">  })(window,jQuery);\</span>
+<span class="pl-s">  &lt;/script&gt;<span class="pl-pds">'</span></span>;
 
-<span class="pl-en">$</span>(<span class="pl-k">function</span>() {
-  <span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">"</span>div#my_mod<span class="pl-pds">"</span></span>).<span class="pl-en">html</span>(style <span class="pl-k">+</span> template <span class="pl-k">+</span> script);
-});
+  <span class="pl-en">$</span>(<span class="pl-k">function</span>() {
+    <span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">"</span>div#my_mod<span class="pl-pds">"</span></span>).<span class="pl-en">html</span>(style <span class="pl-k">+</span> template <span class="pl-k">+</span> script);
+  });
 })(<span class="pl-c1">window</span>, jQuery);</pre></div>
 
-<p>at last, you load the module and use it in your html page:</p>
+<p>Now you can load the module and use it in your html page:</p>
 
 <div class="highlight highlight-text-html-basic"><pre>&lt;!DOCTYPE html&gt;
 &lt;<span class="pl-ent">html</span>&gt;
