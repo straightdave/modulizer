@@ -1,6 +1,7 @@
-# modulizer
+# Modulizer
 A ruby gem that helps modulize the web pages
 
+[![Gem Version](https://badge.fury.io/rb/modulizer.svg)](https://badge.fury.io/rb/modulizer)
 [![Build Status](https://travis-ci.org/straightdave/modulizer.svg?branch=master)](https://travis-ci.org/straightdave/modulizer)
 
 ## basic idea
